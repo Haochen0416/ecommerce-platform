@@ -27,8 +27,7 @@ class UserOut(BaseModel):
     email: str
     role: str
     created_at: datetime
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class Token(BaseModel):
     access_token: str
@@ -57,8 +56,7 @@ class ProductOut(BaseModel):
     price: Decimal
     stock: int
     category: Optional[str]
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # ── Order schemas ─────────────────────────────────────────────────────────────
 class OrderItemCreate(BaseModel):
@@ -73,8 +71,7 @@ class OrderItemOut(BaseModel):
     product_id: int
     quantity: int
     unit_price: Decimal
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class OrderOut(BaseModel):
     id: int
@@ -83,8 +80,7 @@ class OrderOut(BaseModel):
     total_amount: Decimal
     created_at: datetime
     items: List[OrderItemOut] = []
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # ── Audit log schema ──────────────────────────────────────────────────────────
 class AuditLogOut(BaseModel):
@@ -95,5 +91,4 @@ class AuditLogOut(BaseModel):
     record_id: Optional[int]
     detail: Optional[str]
     created_at: datetime
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

@@ -1,15 +1,18 @@
-from fastapi import Request
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import auth, products, orders, admin
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="E-Commerce Platform", version="1.0.0")
 
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,11 +25,4 @@ app.include_router(admin.router)
 
 @app.get("/")
 def root():
-    return {"message": "E-Commerce API", "docs": "/docs"}
-
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    # Strip "input" so submitted values (e.g. passwords) are never echoed back
-    errors = [{k: v for k, v in err.items() if k not in ("input", "ctx")} for err in exc.errors()]
-    return JSONResponse(status_code=422, content={"detail": errors})
+    return {"message": "E-Commerce Platform API", "docs": "/docs", "version": "1.0.0"}
