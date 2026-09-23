@@ -67,17 +67,29 @@ def update_order_status(
     order_id: int,
     status: str,
     db: Session = Depends(get_db),
-    admin: User = Depends(require_admin),
+    current_user: User = Depends(get_current_user),
 ):
-    valid = ["pending", "paid", "shipped", "completed", "cancelled"]
-    if status not in valid:
-        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid}")
+    valid_all = ["pending", "paid", "shipped", "completed", "cancelled"]
+    customer_allowed = ["cancelled"]
+
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
+
+    if current_user.role != "admin":
+        if order.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        if status not in customer_allowed:
+            raise HTTPException(status_code=403, detail="Customers can only cancel orders")
+        if order.status != "pending":
+            raise HTTPException(status_code=400, detail="Only pending orders can be cancelled")
+
+    if status not in valid_all:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_all}")
+
     old_status = order.status
     order.status = status
-    db.add(AuditLog(user_id=admin.id, action="update_order_status", table_name="orders",
+    db.add(AuditLog(user_id=current_user.id, action="update_order_status", table_name="orders",
                     record_id=order.id, detail=f"Status: {old_status} -> {status}"))
     db.commit()
     return {"message": f"Order {order_id} status updated to {status}"}
