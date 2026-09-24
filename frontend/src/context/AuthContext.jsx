@@ -3,6 +3,8 @@ import { authAPI } from '../api/client';
 
 const AuthContext = createContext(null);
 
+export const getCartKey = (userId) => `cart_${userId}`;
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(localStorage.getItem('role'));
