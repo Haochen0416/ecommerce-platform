@@ -2,26 +2,17 @@ import { useState, useEffect } from 'react';
 import { productAPI } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 
-const getImageUrl = (name, category) => {
-  const keywords = {
-    'iPhone 15': 'iphone',
-    'iPhone 18': 'iphone',
-    'MacBook Pro 14': 'macbook',
-    'AirPods Pro': 'airpods,earbuds',
-    'Nike Air Max': 'nike,sneakers',
-    'Python Crash Course': 'programming,book',
-    'Coffee Maker': 'coffee,maker',
+const getImageUrl = (name) => {
+  const images = {
+    'iPhone 15': '/images/iphone15.png',
+    'iPhone 18': '/images/iphone18.png',
+    'MacBook Pro 14': '/images/macbook14.png',
+    'AirPods Pro': '/images/airpods.png',
+    'Nike Air Max': '/images/nike-air-max.png',
+    'Python Crash Course': '/images/python-book.png',
+    'Coffee Maker': '/images/coffee-maker.png',
   };
-  const fallback = {
-    'Electronics': 'electronics,gadget',
-    'Clothing': 'fashion,clothing',
-    'Books': 'book,reading',
-    'Home': 'home,kitchen',
-    'Sports': 'sports',
-    'Beauty': 'beauty,cosmetics',
-  };
-  const kw = keywords[name] || fallback[category] || 'product';
-  return `https://source.unsplash.com/300x200/?${kw}`;
+  return images[name] || '/images/iphone15.png';
 };
 
 export default function Products() {
@@ -74,7 +65,7 @@ export default function Products() {
           <div key={p.id} style={styles.card}>
             <div style={styles.imageWrapper}>
               <img
-                src={getImageUrl(p.name, p.category)}
+                src={getImageUrl(p.name)}
                 alt={p.name}
                 style={styles.image}
                 onError={e => { e.target.style.display='none'; }}
