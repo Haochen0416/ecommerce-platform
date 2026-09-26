@@ -10,11 +10,11 @@ A full-stack e-commerce application built with FastAPI, MySQL, and React, develo
 
 ## Features
 
-- Dual-role system: **Admin** and **Customer**
+- Dual-role system: Admin and Customer
 - JWT authentication with bcrypt password hashing
 - Shopping cart with real-time stock validation (per-user, persists across sessions)
 - Order management with customer cancel support
-- **Admin Dashboard**: product CRUD, order status management, user list, audit log
+- Admin Dashboard: product CRUD, order status management, user list, audit log
 - Full audit log for all operations
 - 19 pytest tests covering auth, products, and orders
 - Product images served from local static files
